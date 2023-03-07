@@ -4,13 +4,14 @@
 	bottom=3.23cm]{geometry}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
+\usepackage{sectsty}
 \setlength{\parskip}{\baselineskip}
 \newcommand{\personalheader}[2]{
 	\pagestyle{fancy}
   \setlength{\headheight}{70.866141732pt}
   \setlength{\topmargin}{-50pt}
   \setlength{\headsep}{0pt}
-  \setlength{\footskip}{10.866141732pt}
+  \setlength{\footskip}{13.866141732pt}
 	\renewcommand{\headrulewidth}{0pt}
 	\fancyhead[R]{#1\\\ \\#2}
 	\fancyfoot{}
@@ -24,3 +25,6 @@
 \renewcommand{\labelitemii}{$\textcolor{unir-azul-fuerte}{\cdot}$}
 \renewcommand{\labelitemiii}{$\textcolor{unir-azul-fuerte}{\diamond}$}
 \renewcommand{\labelitemiv}{$\textcolor{unir-azul-fuerte}{\ast}$}
+\sectionfont{\color{unir-azul-fuerte}}
+\subsectionfont{\color{unir-azul-fuerte}}
+\subsubsectionfont{\color{unir-azul-fuerte}}
