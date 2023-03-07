@@ -1,0 +1,45 @@
+\usepackage[left=0.6in,
+	right=0.6in,
+	top=1in,
+	bottom=1.3in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\setlength{\parskip}{\baselineskip}
+\newcommand{\personalheader}[1]{
+	\pagestyle{fancy}
+  \setlength{\headheight}{84.54376pt}
+  \setlength{\topmargin}{-50pt}
+  \setlength{\headsep}{0pt}
+  \setlength{\footskip}{50pt}
+	\renewcommand{\headrulewidth}{0pt}
+	\fancyhead{}
+	\fancyhead[C]{
+		\begin{center}
+			\begin{tabular}{l|l|l}
+				\noalign{\global\arrayrulewidth=0.1mm}
+				\arrayrulecolor{unir-azul-fuerte}
+				\hline
+				\rowcolor{unir-azul-flojo}
+				\multicolumn{1}{c|}{\textcolor{unir-azul-fuerte}{\rule{0pt}{1em}Asignatura}} &
+				\multicolumn{1}{c|}{\textcolor{unir-azul-fuerte}{Datos del alumno}} &
+				\multicolumn{1}{c}{\textcolor{unir-azul-fuerte}{Fecha}} \\
+				\hline
+				\multirow{2}{*}{\textbf{#1}} & \rule{0pt}{1em}Apellidos: Costa Cano & \multirow{2}{*}{\today} \\
+				\cline{2-2}
+				& \rule{0pt}{1em}Nombre: Francisco     &                         \\
+				\hline
+			\end{tabular}
+		\end{center}
+	}
+	\fancyfoot{}
+	\fancyfoot[L]{\includegraphics[scale=0.35]{logo}}
+	\fancyfoot[R]{\colorbox{unir-azul-fuerte}{\color{white}\thepage}}
+}
+\newcommand{\titulo}[1]{\textcolor{unir-azul-fuerte}{\begin{center}\LARGE{\textbf{#1}}\end{center}}\vspace{0.2in}}
+\newcommand{\primersubtitulo}[1]{\textcolor{unir-azul-fuerte}{\large #1}}
+\newcommand{\subtitulo}[1]{\vspace{0.1in}\textcolor{unir-azul-fuerte}{\large #1}}
+\newcommand{\seccion}[1]{\vspace{0.1in}\textbf{#1}}
+\renewcommand{\labelitemi}{$\textcolor{unir-azul-fuerte}{\bullet}$}
+\renewcommand{\labelitemii}{$\textcolor{unir-azul-fuerte}{\cdot}$}
+\renewcommand{\labelitemiii}{$\textcolor{unir-azul-fuerte}{\diamond}$}
+\renewcommand{\labelitemiv}{$\textcolor{unir-azul-fuerte}{\ast}$}
