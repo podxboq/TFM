@@ -10,9 +10,13 @@
 \usepackage{color}
 \usepackage{multicol}
 \usepackage{float}
-\usepackage{biblatex}
+\usepackage{stmaryrd}
+\usepackage[round]{natbib}
+\bibliographystyle{abbrvnat}
+\renewcommand{\bibsection}{\titulo{Referencias bibliográficas}}
 \input{personalizacion}
 \input{cabecera}
+\input{personalizacion_tfm}
 \renewcommand*\contentsname{\textcolor{unir-azul-fuerte}{Índice de contenidos}}
 \renewcommand{\listfigurename}{\textcolor{unir-azul-fuerte}{Índice de figuras}}
 \renewcommand{\listtablename}{\textcolor{unir-azul-fuerte}{Índice de tablas}}
@@ -24,7 +28,6 @@
 	\include{indice}
 	\include{figuras}
 	\include{tablas}
-
 	\include{introduccion}
 	\include{contexto}
 	\include{requisitos}

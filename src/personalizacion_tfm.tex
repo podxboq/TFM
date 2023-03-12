@@ -1,0 +1,16 @@
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{corollary}[theorem]{Corolario}
+\newtheorem{lemma}[theorem]{Resultado}
+\newtheorem{definition}[theorem]{Definición}
+\newtheorem{example}[theorem]{Ejemplo}
+\let\oldexample\example
+\renewcommand{\example}{\oldexample\normalfont}
+\providecommand{\logical}[2]{#1_{\shortrightarrow #2}}
+\providecommand{\logicalGeneric}[1]{\logical{#1}{n}}
+\providecommand{\palabra}[2]{#1_1\cdots #1_{#2}}
+\providecommand{\palabraN}[1]{\palabra{#1}{n}}
+\providecommand{\palabraG}{\palabra{x}{n}}
+\providecommand{\palabraG}{\palabra{x}{n}}
+\providecommand{\push}[1]{\stackrel{\hookrightarrow}{#1}}
+\providecommand{\pull}[1]{\stackrel{\hookleftarrow}{#1}}
+\providecommand{\ent}[1]{\lfloor #1 \rfloor}

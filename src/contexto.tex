@@ -1,20 +1,130 @@
 \section{Contexto y estado del arte}
 
-Después de la introducción, se suele describir el contexto de aplicación. Suele ser un capítulo (o dos en ciertos casos) en el que se estudia a fondo el dominio de aplicación, citando numerosas referencias. Debe aportar un buen resumen del conocimiento que ya existe en el campo de los problemas habituales identificados.
+El trabajo se centra exclusivamente en el caso binario, donde el conjunto alfabeto es $\Z_2=\set{0, 1}$.
+Un código de longitud $n$ es un subconjunto $C$ de $\Z_2^n$.
+Una palabra de longitud $n$ es un elemento $x$ de $\Z_2^n$, que se llama palabra clave si es un elemento de $C$.
 
-Es conveniente que revises los estudios actuales publicados en la línea elegida, y deberás consultar diferentes fuentes. No es suficiente con la consulta on-line, es necesario acudir a la biblioteca y consultar manuales técnicos.
+Un elemento $x\in\Z_2^n$ que es transmitido se necesita mantener la referencia a este elemento cuando es recibido, para ello se denota al elemento enviado $\push{x}$ y al elemento recibido $\pull{x}$.
 
-Hay que tener presente los autores de referencia en la temática del trabajo de investigación. Si se ha excluido a alguno de los relevantes hay que justificar adecuadamente su exclusión. Si por la extensión del trabajo no se puede señalar a todos los autores, habrá que justificar por qué se han elegido unos y se ha prescindido de otros.
+Un elemento $(x_1,\dots,x_n)\in\Z_2^n$ para simplificar notación se podrá escribir como $x_1\cdots x_n$, cuando todos los elementos $x_i$ sean iguales a $x$ también se podrá escribir por $\logical{x}{n}$.
 
-La organización específica en secciones dependerá estrechamente el trabajo concreto que vayas a realizar. En este punto será fundamental la colaboración con tu DIRECTOR, él podrá asesorarte y guiarte, aunque siempre debes tener claro que el trabajo fundamental es tuyo.
+Sobre $\Z_2$ se tiene definido una suma interna, muchas veces llamada suma directa y que se denota como $\oplus$ y cuya diferencia con respecto a la suma habitual es que $1\oplus 1 = 0$.
 
-El capítulo debería concluir con una última sección de resumen de conclusiones, resumiendo las principales averiguaciones del estudio del dominio y cómo van a afectar al desarrollo específico del trabajo.
+Un resultado trivial y que se debe resaltar es que $\forall\ x,y\in\Z_2$ o bien $x=y$ o bien $x\oplus 1=y$.
 
-Recuerda que para citar trabajos de diferentes autores es fundamental e imprescindible seguir el formato APA, según se describe en el documento Normativa\_APA.pdf disponible en el apartado de Documentación del Aula de información general del Máster Universitario en Computación Cuántica (MUCC). No se debe mencionar, ni utilizar ninguna fuente, sin citarla apropiadamente.
+La manera más sencilla de proteger y recuperar la información que se quiere transmitir, es enviando varias copias del elemento inicial, y comparar todas las copias entre sí, la cantidad suficiente de veces que nos permita recuperar el valor modificado en caso de error.
+
+Para ello, se quiere transmitir un elemento $x\in\Z_2$, se puede hacer $n-1$ copias y enviar un bloque de longitud $n$, nuestro código $C$ será el conjunto $\set{\logical{0}{n}, \logical{1}{n}}\subset \Z_2^n$, este tipo de código recibe el nombre de código binario de repetición de longitud $n$, de esta manera, si la recepción del elemento $x$ es tal que no pertenece a $C$, se sabe que ha ocurrido un error, y la pregunta que nos queda es ¿se sabrá corregir el error y obtener el elemento originalmente recibido?
+
+Si por ejemplo se recibe el elemento $1\logical{0}{n-1}$, se tiene dos opciones, o el elemento enviado es $\logical{0}{n}$ y se ha producido un error o el elemento enviado es $\logical{1}{n}$ y se han producido $n-1$ errores.
+Lo más habitual es considerar que ha ocurrido la primera opción, sin embargo, si el canal de transmisión es muy ruidoso y con alta probabilidad de generar errores se tiene que considerar la segunda opción.
+Es por este motivo que conocer la probabilidad de error es muy importante para poder hacer un buen análisis de los elementos recibidos.
+
+Otro detalle importante, que se debe tener en cuenta es si $n$ es par y $m=n/2$, el elemento recibido $\logical{x}{m}\logical{y}{m}$ no se puede corregir, ya que el mismo número de errores se han producido tanto si el elemento original es $\logical{x}{n}$ como $\logical{y}{n}$.
+
+Tras las reflexiones anteriores, se van a definir los conceptos que usaremos a lo largo de este trabajo para abordar el objetivo.
+
+\begin{definition}
+	Sean $x=\palabraG$ y $y=\palabraN{y}$ dos palabras de $\Z_2^n$, se llama \define{distancia de Hamming}{distancia_hamming} a
+	\[
+		d(x, y) = x_1\oplus y_1 + \dots + x_n\oplus y_n
+	\]
+\end{definition}
+
+Como se comprueba en Hill~(\citeyear[5]{hill_first_1980}) la distancia de Hamming es una distancia, y como es la única distancia que se va a considerar la se llamará simplemente distancia.
+
+Cuando un elemento $x\in\Z_2^n$ es enviado y el canal lo modifica, lo importante no es cuantos cambios se realizan en $x$, pues a veces un cambio corrige un cambio anterior, así que simplemente hay que saber como está el elemento en el momento de recibirlo, y la mejor forma de medir estos cambios es sabiendo la distancia con respecto al enviado.
+
+\begin{definition}
+	Sean $C$ un código de $\Z_2^n$ y $x\in C$, se dice que $\pull{x}$ es un \define{n-error}{n_error} si $d(\pull{x}, \push{x})= n$.
+\end{definition}
+
+Se puede definir también la distancia de una palabra a un conjunto y dos valores asociado a un conjunto que se llama el radio interior y el radio exterior.
+
+\begin{definition}
+	Sean $x=\palabraG$ y $C$ un subconjunto de $\Z_2^n$, se llama \define{distancia de x a C}{distancia_conjunto} a
+	\[
+		d(x, C) = \min\set{d(x,y)\ \forall y\in C}
+	\]
+\end{definition}
+
+\begin{definition}
+	Sean $C$ un subconjunto de $\Z_2^n$, se llama \define{radio interior de C}{radio_interior_conjunto} a
+	\[
+		r(C) = \min\set{d(x,y)\ \forall x,y\in C\tq x\neq y}
+	\]
+\end{definition}
+
+\begin{definition}
+	Sean $C$ un subconjunto de $\Z_2^n$, se llama \define{radio exterior de C}{radio_exterior_conjunto} a
+	\[
+		R(C) = \max\set{d(x,y)\ \forall x,y\in C}
+	\]
+\end{definition}
+
+\begin{definition}
+	Sean $x\in\Z_2^n$, se llama \define{bola de radio n y centro x}{bola} a
+	\[
+		B(n, x) = \set{y\in\Z_2^n \tq d(x,y)\leq n}
+	\]
+\end{definition}
+
+Con la nomenclatura de las definiciones anteriores, se puede comprobar fácilmente los siguientes resultados:
+\begin{enumerate}
+	\item $x\in C \iff d(x, C) = 0$.
+	\item $r(C)\leq R(C)$.
+\end{enumerate}
+
+Una técnica muy habitual de corregir errores es considerar que el elemento recibido, originalmente es el elemento más cercano al recibido, es decir, si $C$ es un código y $\push{x}\in C$ es enviado, entonces tomamos $n=d(\pull{x}, C)$ y un elemento $x'\in C\tq d(\pull{x}, x')=n$, hay que considerar códigos para los cuales sin opción se tenga que $x'=\push{x}$.
+
+\begin{lemma}
+	Sea $C\in\Z_n^2$ un código con radio interno $n$, si $n$ es impar, entonces se puede corregir correctamente a lo más los $\ent{n/2}$-errores.
+\end{lemma}
+\begin{proof}
+	Sea $x\in C$ para el cual $\pull{x}$ es un $\ent{n/2}$-error, entonces $d(\pull{x}, \push{x})=\ent{n/2}$.
+	Supongamos que existe otra palabra $y$ del código que es el más cercano a $\pull{x}$, entonces
+	\[
+		n = r(C) \leq d(\push{x}, y) \leq d(\push{x}, \pull{x}) + d(\pull{x}, y) = \ent{n/2} + d(\pull{x}, y) \leq \ent{n/2} + \ent{n/2} < n
+	\]
+	Por tanto se llega a una contradicción, lo que supone que
+	\[
+		C\cap B(\pull{x}, \ent{n/2}) = \set{\push{x}}\qedhere
+	\]
+\end{proof}
+
+Con el mismo razonamiento, se puede observar que para cuando el radio interno de un código es $n$ par, entonces se puede corregir a lo más $\ent{(n-1)/2}$-errores.
+\begin{example}
+	Consideremos el siguiente código de $\Z_2^4$, $C=\set{0000, 0101, 1010, 1111}$.
+	\begin{align*}
+		d(0000, 0101) &= 2 & d(0000, 1010) &= 2 & d(0000, 1111) = 4 \\
+		& & d(0101, 1010) &= 2 & d(0101, 1111) = 2 \\
+		& & & & d(1010, 1111) = 2
+	\end{align*}
+	Tenemos que el radio interno de $C$ es $2$, como $\ent{(2-1)/2}=0$ pues es claro que hay errores que no se pueden corregir correctamente.
+
+	Efectivamente, si por ejemplo recibimos la palabra $1011$, no se puede saber si la palabra clave enviada es $1010$ o $1111$, es decir, puede haber ocurrido un sólo error en la cuarta posición o un sólo error en la segunda posición.
+\end{example}
+
+\begin{example}
+	Consideremos el siguiente código de $\Z_2^5$, $C=\set{00000, 10101, 11010, 01111}$.
+	\begin{align*}
+		d(00000, 10101) &= 3 & d(00000, 11010) &= 3 & d(00000, 01111) = 4 \\
+		 & & d(10101, 11010) &= 3 & d(10101, 01111) = 3 \\
+		& & & & d(11010, 01111) = 3
+	\end{align*}
+	Tenemos que el radio interno de $C$ es $3$, como $\ent{3/2}=1$ pues se pueden corregir correctamente cualquier 1-error.
+
+	Por ejemplo, si recibimos la palabra $10111$, calculando la distancia a $C$ que es
+	\begin{align*}
+		d(10111, 00000) &= 4 & d(10111, 10101) &= 1 & d(10111, 11010) &= 3 & d(10111, 01111) = 2
+	\end{align*}
+	Así que el menor de las distancias es únicamente $10101$ y por tanto podemos corregir el error.
+\end{example}
 
 \subsection{Objetivos y metodología de trabajo}
 
-Este tercer capítulo es el puente entre el estudio del dominio y la contribución a realizar. Según el trabajo concreto, el bloque se puede organizar de distintas formas, pero hay tres elementos que deben estar presentes con mayor o menor detalle: (1) objetivo general, (2) objetivos específicos y (3) metodología de trabajo.
+Este tercer capítulo es el puente entre el estudio del dominio y la contribución a realizar.
+Según el trabajo concreto, el bloque se puede organizar de distintas formas, pero hay tres elementos que deben estar presentes con mayor o menor detalle: (1) objetivo general, (2) objetivos específicos y (3) metodología de trabajo.
 
 Es muy importante, por no decir imprescindible, que los objetivos (general y específicos) sean SMART (Doran, 1981) según la idea de George T. Doran que utilizó la palabra smart (inteligente en inglés) para definir las características de un objetivo:
 \begin{itemize}
@@ -27,7 +137,9 @@ Es muy importante, por no decir imprescindible, que los objetivos (general y esp
 
 \subsubsection{Objetivo general}
 
-Los trabajos aplicados se centran en conseguir un impacto concreto, demostrando la efectividad de una tecnología, proponiendo una nueva metodología o aportando nuevas herramientas tecnológicas. El objetivo por tanto no debe ser sin más “crear una herramienta” o “proponer una metodología”, sino que debe centrarse en conseguir un efecto observable. Además, como se ha dicho antes el objetivo general debe ser SMART.
+Los trabajos aplicados se centran en conseguir un impacto concreto, demostrando la efectividad de una tecnología, proponiendo una nueva metodología o aportando nuevas herramientas tecnológicas.
+El objetivo por tanto no debe ser sin más “crear una herramienta” o “proponer una metodología”, sino que debe centrarse en conseguir un efecto observable.
+Además, como se ha dicho antes el objetivo general debe ser SMART\@.
 
 Ejemplo de objetivo general SMART: Mejorar el servicio de audio guía de un museo convirtiéndolo en una guía interactiva controlada por voz y valorada positivamente, un mínimo 4 sobre 5, por los visitantes del museo.
 
@@ -35,9 +147,13 @@ Este objetivo descrito anteriormente podría dar lugar a un trabajo de tipo 2 (d
 
 \subsubsection{Objetivos específicos}
 
-Independientemente del tipo de trabajo, la hipótesis o el objetivo general típicamente se dividirán en un conjunto de objetivos específicos analizables por separado. Estos objetivos específicos suelen ser explicaciones de los diferentes pasos o tareas a seguir en la consecución del objetivo general.
+Independientemente del tipo de trabajo, la hipótesis o el objetivo general típicamente se dividirán en un conjunto de objetivos específicos analizables por separado.
+Estos objetivos específicos suelen ser explicaciones de los diferentes pasos o tareas a seguir en la consecución del objetivo general.
 
-Con los objetivos específicos has de concretar qué pretendes conseguir. Estos objetivos que deben ser SMART se formulan con un verbo en infinitivo más el contenido del objeto de estudio. Se suelen usar viñetas para cada uno de los objetivos. Se pueden utilizar fórmulas verbales, como las siguientes:
+Con los objetivos específicos has de concretar qué pretendes conseguir.
+Estos objetivos que deben ser SMART se formulan con un verbo en infinitivo más el contenido del objeto de estudio.
+Se suelen usar viñetas para cada uno de los objetivos.
+Se pueden utilizar fórmulas verbales, como las siguientes:
 \begin{itemize}
 	\item Analizar
 	\item Calcular
@@ -58,11 +174,11 @@ Con los objetivos específicos has de concretar qué pretendes conseguir. Estos 
 	\item Verificar
 \end{itemize}
 
-Los objetivos específicos suelen ser alrededor de 5. Normalmente uno o dos sobre el marco teórico o estado del arte y dos o tres sobre el desarrollo específico de la contribución.
+Los objetivos específicos suelen ser alrededor de 5.
+Normalmente uno o dos sobre el marco teórico o estado del arte y dos o tres sobre el desarrollo específico de la contribución.
 
 En un trabajo como el anterior se incluirían objetivos específicos tales como:
 \begin{itemize}
-\item Identificar las tecnologías disponibles para crear un chatbot
 \item Explorar recursos lingüísticos online que describan el dominio de los muesos en español
 \item Diseñar e implementar el módulo de gestión del dialogo
 \item Evaluar el agente conversacional con 10 visitantes del museo.
@@ -70,6 +186,7 @@ En un trabajo como el anterior se incluirían objetivos específicos tales como:
 
 \subsection{Metodología del trabajo}
 
-De cara a alcanzar los objetivos específicos (y con ellos el objetivo general o la validación/refutación de la hipótesis), será necesario realizar una serie de pasos. La metodología del trabajo debe describir qué pasos se van a dar, el porqué de cada paso, qué instrumentos se van a utilizar, cómo se van a analizar los resultados, etc.
+De cara a alcanzar los objetivos específicos (y con ellos el objetivo general o la validación/refutación de la hipótesis), será necesario realizar una serie de pasos.
+La metodología del trabajo debe describir qué pasos se van a dar, el porqué de cada paso, qué instrumentos se van a utilizar, cómo se van a analizar los resultados, etc.
 
 \newpage
